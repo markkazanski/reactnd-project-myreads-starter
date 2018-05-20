@@ -46,7 +46,11 @@ class BooksApp extends React.Component {
     showSearchPage: false
   }
 
-  componentDidMount(){
+  componentDidMount = () => {
+    this.loadBooks();
+  }
+
+  loadBooks = () => {
     BooksAPI.getAll()
     .then( (books) => {
       this.setState( () => ({
@@ -54,6 +58,19 @@ class BooksApp extends React.Component {
       }))
     });
   }
+
+  onCategoryChange = (bookid, shelf) =>{
+    console.log("BookID: " + bookid);
+    console.log("Shelf: " + shelf);
+    BooksAPI.update({id: bookid}, shelf)
+        .then(
+            x => {
+              console.log(x);
+              this.loadBooks();
+            }
+        );
+  }
+
 
   render() {
     return (
@@ -86,9 +103,9 @@ class BooksApp extends React.Component {
             </div>
             <div className="list-books-content">
               <div>
-              <Bookshelf title="Currently Reading" booksArray={this.state.books.filter(x => x.shelf === "currentlyReading")} />
-              <Bookshelf title="Want to Read" booksArray={this.state.books.filter(x => x.shelf === "wantToRead")} />
-              <Bookshelf title="Read" booksArray={this.state.books.filter(x => x.shelf === "read")} />
+              <Bookshelf onCategoryChange={this.onCategoryChange} title="Currently Reading" booksArray={this.state.books.filter(x => x.shelf === "currentlyReading")} />
+              <Bookshelf onCategoryChange={this.onCategoryChange} title="Want to Read" booksArray={this.state.books.filter(x => x.shelf === "wantToRead")} />
+              <Bookshelf onCategoryChange={this.onCategoryChange} title="Read" booksArray={this.state.books.filter(x => x.shelf === "read")} />
               </div>
             </div>
             <div className="open-search">
