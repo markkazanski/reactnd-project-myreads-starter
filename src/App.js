@@ -105,8 +105,8 @@ class BooksApp extends React.Component {
   searchBooks = () => {
     BooksAPI.search(this.state.query)
     .then((result)=>{
-      console.log(result.error);
-      if(!result.error){
+      console.log(result && result.error);
+      if(result && !result.error){
         this.setState( () => ({
           searchResults: result
         }));
@@ -134,7 +134,7 @@ class BooksApp extends React.Component {
                   However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
                   you don't find a specific author or title. Every search is limited by search terms.
                 */}
-                <input onBlur={this.searchBooks} onChange={(event) => (this.updateQuery(event.target.value))} type="text" placeholder="Search by title or author"/>
+                <input onKeyUp={this.searchBooks} onChange={(event) => (this.updateQuery(event.target.value))} type="text" placeholder="Search by title or author"/>
 
               </div>
             </div>
