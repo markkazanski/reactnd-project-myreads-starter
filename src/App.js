@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Bookshelf from './components/Bookshelf';
 import * as BooksAPI from './BooksAPI';
 
-BooksAPI.getAll().then(x=>console.log(x));
+//BooksAPI.getAll().then(x=>console.log(x));
 
 Bookshelf.propTypes = {
   title: PropTypes.string.isRequired,
@@ -66,19 +66,31 @@ class BooksApp extends React.Component {
       this.setState( () => ({
         books: books
       }))
+    })
+    .then(this.updateSearchResults); //after updating list of books, update search results array
+  }
+
+  updateSearchResults = () => {
+    this.state.books.forEach((book)=>{ //go through each book and remove it from search results
+      this.setState( (prevState) => {
+        return {searchResults: this.state.searchResults.filter((x)=> x.id !== book.id)};
+      });
     });
+    
+
   }
 
   onCategoryChange = (bookid, shelf) =>{
-    console.log("BookID: " + bookid);
-    console.log("Shelf: " + shelf);
+    //console.log("BookID: " + bookid);
+    //console.log("Shelf: " + shelf);
     BooksAPI.update({id: bookid}, shelf)
         .then(
             x => {
-              console.log(x);
-              this.loadBooks(); //find a way to update search results
+              //console.log(x);
+              this.loadBooks();
             }
         );
+    
   }
 
   updateQuery = (query) => { 
@@ -96,7 +108,8 @@ class BooksApp extends React.Component {
       if(!result.error){
         this.setState( () => ({
           searchResults: result
-        }))
+        }));
+        this.updateSearchResults();
       }
     });
   }
@@ -123,10 +136,10 @@ class BooksApp extends React.Component {
               </div>
             </div>
             <div className="search-books-results">
-              <Bookshelf onCategoryChange={this.onCategoryChange} title="Search Results" booksArray={this.state.searchResults.filter(x => !x.shelf)} />
-              <Bookshelf onCategoryChange={this.onCategoryChange} title="Currently Reading" booksArray={this.state.books.filter(x => x.shelf === "currentlyReading")} />
-              <Bookshelf onCategoryChange={this.onCategoryChange} title="Want to Read" booksArray={this.state.books.filter(x => x.shelf === "wantToRead")} />
-              <Bookshelf onCategoryChange={this.onCategoryChange} title="Read" booksArray={this.state.books.filter(x => x.shelf === "read")} />
+              <Bookshelf key="bookshelf-search" onCategoryChange={this.onCategoryChange} title="Search Results" booksArray={this.state.searchResults.filter(x => typeof x.shelf !== "string")} />
+              <Bookshelf key="bookshelf-current" onCategoryChange={this.onCategoryChange} title="Currently Reading" booksArray={this.state.books.filter(x => x.shelf === "currentlyReading")} />
+              <Bookshelf key="bookshelf-want" onCategoryChange={this.onCategoryChange} title="Want to Read" booksArray={this.state.books.filter(x => x.shelf === "wantToRead")} />
+              <Bookshelf key="bookshelf-read" onCategoryChange={this.onCategoryChange} title="Read" booksArray={this.state.books.filter(x => x.shelf === "read")} />
             </div>
           </div>
         ) : (
@@ -136,9 +149,9 @@ class BooksApp extends React.Component {
             </div>
             <div className="list-books-content">
               <div>
-              <Bookshelf onCategoryChange={this.onCategoryChange} title="Currently Reading" booksArray={this.state.books.filter(x => x.shelf === "currentlyReading")} />
-              <Bookshelf onCategoryChange={this.onCategoryChange} title="Want to Read" booksArray={this.state.books.filter(x => x.shelf === "wantToRead")} />
-              <Bookshelf onCategoryChange={this.onCategoryChange} title="Read" booksArray={this.state.books.filter(x => x.shelf === "read")} />
+              <Bookshelf key="bookshelf-current" onCategoryChange={this.onCategoryChange} title="Currently Reading" booksArray={this.state.books.filter(x => x.shelf === "currentlyReading")} />
+              <Bookshelf key="bookshelf-want" onCategoryChange={this.onCategoryChange} title="Want to Read" booksArray={this.state.books.filter(x => x.shelf === "wantToRead")} />
+              <Bookshelf key="bookshelf-read" onCategoryChange={this.onCategoryChange} title="Read" booksArray={this.state.books.filter(x => x.shelf === "read")} />
               </div>
             </div>
             <div className="open-search">
