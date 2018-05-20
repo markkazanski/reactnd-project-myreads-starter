@@ -3,15 +3,12 @@ import React from 'react'
 import './App.css'
 import PropTypes from 'prop-types';
 import Bookshelf from './components/Bookshelf';
+import Searchpage from './components/PageSearch';
+import Homepage from './components/Homepage';
 import * as BooksAPI from './BooksAPI';
 import { Route, Link } from 'react-router-dom'; 
 
 //BooksAPI.getAll().then(x=>console.log(x));
-
-Bookshelf.propTypes = {
-  title: PropTypes.string.isRequired,
-  booksArray: PropTypes.array.isRequired
-};
 
 class BooksApp extends React.Component {
   state = {
@@ -122,49 +119,13 @@ class BooksApp extends React.Component {
         <Route
           exact path="/search"
           render={()=>(
-          <div className="search-books">
-            <div className="search-books-bar">
-              <Link to="/" className="close-search">Close</Link>
-              <div className="search-books-input-wrapper">
-                {/*
-                  NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                  You can find these search terms here:
-                  https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                  However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                  you don't find a specific author or title. Every search is limited by search terms.
-                */}
-                <input onKeyUp={this.searchBooks} onChange={(event) => (this.updateQuery(event.target.value))} type="text" placeholder="Search by title or author"/>
-
-              </div>
-            </div>
-            <div className="search-books-results">
-              <Bookshelf key="bookshelf-search" onCategoryChange={this.onCategoryChange} title="Search Results" booksArray={this.state.searchResults.filter(x => typeof x.shelf !== "string")} />
-              <Bookshelf key="bookshelf-current" onCategoryChange={this.onCategoryChange} title="Currently Reading" booksArray={this.state.books.filter(x => x.shelf === "currentlyReading")} />
-              <Bookshelf key="bookshelf-want" onCategoryChange={this.onCategoryChange} title="Want to Read" booksArray={this.state.books.filter(x => x.shelf === "wantToRead")} />
-              <Bookshelf key="bookshelf-read" onCategoryChange={this.onCategoryChange} title="Read" booksArray={this.state.books.filter(x => x.shelf === "read")} />
-            </div>
-          </div>
+            <Searchpage onCategoryChange={this.onCategoryChange} searchBooks={this.searchBooks} updateQuery={this.updateQuery} searchResults={this.state.searchResults} books={this.state.books} />
         )}/>
 
         <Route
           exact path="/"
           render={({history})=>(
-            <div className="list-books">
-              <div className="list-books-title">
-                <h1>MyReads</h1>
-              </div>
-              <div className="list-books-content">
-                <div>
-                <Bookshelf key="bookshelf-current" onCategoryChange={this.onCategoryChange} title="Currently Reading" booksArray={this.state.books.filter(x => x.shelf === "currentlyReading")} />
-                <Bookshelf key="bookshelf-want" onCategoryChange={this.onCategoryChange} title="Want to Read" booksArray={this.state.books.filter(x => x.shelf === "wantToRead")} />
-                <Bookshelf key="bookshelf-read" onCategoryChange={this.onCategoryChange} title="Read" booksArray={this.state.books.filter(x => x.shelf === "read")} />
-                </div>
-              </div>
-              <div className="open-search">
-                <Link to="/search">Add a book</Link>
-              </div>
-            </div>
+            <Homepage onCategoryChange={this.onCategoryChange} books={this.state.books} />
           )}
         />
       </div>

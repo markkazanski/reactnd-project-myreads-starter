@@ -22,9 +22,9 @@ class Bookshelf extends React.Component {
 }
 
 Bookshelf.propTypes = {
-    bookTitle: PropTypes.string.isRequired,
-    bookAuthor: PropTypes.string.isRequired,
-    bookImage: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    booksArray: PropTypes.array.isRequired,
+    onCategoryChange: PropTypes.func.isRequired,
 };
 
 export default Bookshelf;
