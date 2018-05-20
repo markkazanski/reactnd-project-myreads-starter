@@ -17,7 +17,7 @@ class Book extends React.Component {
                         <option selected={this.props.shelf === "currentlyReading" && "selected"} value="currentlyReading">Currently Reading</option>
                         <option selected={this.props.shelf === "wantToRead" && "selected"} value="wantToRead">Want to Read</option>
                         <option selected={this.props.shelf === "read" && "selected"} value="read">Read</option>
-                        <option value="none">None</option>
+                        <option selected={!this.props.shelf && "selected"} value="none">None</option>
                         </select>
                     </div>
                 </div>

@@ -37,6 +37,16 @@ class BooksApp extends React.Component {
         shelf: "read"
       }
     ],
+    query: "",
+    searchResults: [
+      {
+        id: "book123",
+        title: "Loading", 
+        authors:["Loading"],
+        imageLinks: {thumbnail: ""},
+        shelf: "none"
+      }
+    ],
     /**
      * TODO: Instead of using this state variable to keep track of which page
      * we're on, use the URL in the browser's address bar. This will ensure that
@@ -66,9 +76,29 @@ class BooksApp extends React.Component {
         .then(
             x => {
               console.log(x);
-              this.loadBooks();
+              this.loadBooks(); //find a way to update search results
             }
         );
+  }
+
+  updateQuery = (query) => { 
+    this.setState(
+      () => ({
+          query: query.trim()
+      })
+    );
+  };
+
+  searchBooks = () => {
+    BooksAPI.search(this.state.query)
+    .then((result)=>{
+      console.log(result.error);
+      if(!result.error){
+        this.setState( () => ({
+          searchResults: result
+        }))
+      }
+    });
   }
 
 
@@ -88,12 +118,15 @@ class BooksApp extends React.Component {
                   However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
                   you don't find a specific author or title. Every search is limited by search terms.
                 */}
-                <input type="text" placeholder="Search by title or author"/>
+                <input onBlur={this.searchBooks} onChange={(event) => (this.updateQuery(event.target.value))} type="text" placeholder="Search by title or author"/>
 
               </div>
             </div>
             <div className="search-books-results">
-              <ol className="books-grid"></ol>
+              <Bookshelf onCategoryChange={this.onCategoryChange} title="Search Results" booksArray={this.state.searchResults.filter(x => !x.shelf)} />
+              <Bookshelf onCategoryChange={this.onCategoryChange} title="Currently Reading" booksArray={this.state.books.filter(x => x.shelf === "currentlyReading")} />
+              <Bookshelf onCategoryChange={this.onCategoryChange} title="Want to Read" booksArray={this.state.books.filter(x => x.shelf === "wantToRead")} />
+              <Bookshelf onCategoryChange={this.onCategoryChange} title="Read" booksArray={this.state.books.filter(x => x.shelf === "read")} />
             </div>
           </div>
         ) : (
