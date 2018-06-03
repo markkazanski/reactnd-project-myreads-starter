@@ -1,12 +1,12 @@
 import React from 'react'
 // import * as BooksAPI from './BooksAPI'
 import './App.css'
-import PropTypes from 'prop-types';
-import Bookshelf from './components/Bookshelf';
+//import PropTypes from 'prop-types';
+//import Bookshelf from './components/Bookshelf';
 import Searchpage from './components/PageSearch';
 import Homepage from './components/Homepage';
 import * as BooksAPI from './BooksAPI';
-import { Route, Link } from 'react-router-dom'; 
+import { Route } from 'react-router-dom'; 
 
 //BooksAPI.getAll().then(x=>console.log(x));
 
