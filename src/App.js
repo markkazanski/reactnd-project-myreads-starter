@@ -12,39 +12,9 @@ import { Route, Link } from 'react-router-dom';
 
 class BooksApp extends React.Component {
   state = {
-    books: [
-      {
-        id: "book123",
-        title: "Loading", 
-        authors:["Loading"],
-        imageLinks: {thumbnail: ""},
-        shelf: "wantToRead"
-      },
-      {
-        id: "book124",
-        title: "Loading", 
-        authors:["Loading"],
-        imageLinks: {thumbnail: ""},
-        shelf: "currentlyReading"
-      },
-      {
-        id: "book125",
-        title: "Loading", 
-        authors:["Loading"],
-        imageLinks: {thumbnail: ""},
-        shelf: "read"
-      }
-    ],
+    books: [],
     query: "",
-    searchResults: [
-      {
-        id: "book123",
-        title: "Loading", 
-        authors:["Loading"],
-        imageLinks: {thumbnail: ""},
-        shelf: "none"
-      }
-    ],
+    searchResults: [],
     /**
      * TODO: Instead of using this state variable to keep track of which page
      * we're on, use the URL in the browser's address bar. This will ensure that
@@ -108,6 +78,10 @@ class BooksApp extends React.Component {
           searchResults: result
         }));
         this.updateSearchResults();
+      }else{
+        this.setState( () => ({
+          searchResults: []
+        }));
       }
     });
   }
