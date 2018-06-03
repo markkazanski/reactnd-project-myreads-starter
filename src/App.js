@@ -79,9 +79,17 @@ class BooksApp extends React.Component {
         }));
         this.updateSearchResults();
       }else{
-        this.setState( () => ({
-          searchResults: []
-        }));
+        if(result && result.error){ //if error returned then search text wrong
+          console.log(result.error);
+          this.setState( () => ({
+            searchResults: [{title: "Invalid Query"}]
+          }));
+        }else{ //if there's no error and no result, then search is empty
+          console.log(result);
+          this.setState( () => ({
+            searchResults: []
+          }));
+        }
       }
     });
   }
